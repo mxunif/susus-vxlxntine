@@ -5,10 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Susu ❤️ My Valentine</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
   body {
     margin: 0;
-    font-family: "Segoe UI", sans-serif;
+    font-family: "Montserrat", "Segoe UI", sans-serif;
     background: linear-gradient(135deg, #ff758c, #ff7eb3);
     /* use min-height so mobile browser UI doesn't cut layout, allow scrolling */
     min-height: 100dvh;
@@ -46,6 +48,31 @@
   .arabic {
     font-size: 1.3rem;
     margin: 15px 0;
+  }
+
+  .dedication {
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  }
+
+  .flags {
+    font-size: 1.4rem;
+    margin-top: 6px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .flags .abbr {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-left: 6px;
+    opacity: 0.95;
   }
 
   button, input {
@@ -126,6 +153,10 @@
 
 <!-- 🔐 PASSWORD SCREEN -->
 <div class="container" id="lock">
+  <div>
+    <div class="dedication">To my lover susu from Mounif</div>
+    <div class="flags" aria-hidden="true">🇧🇯 <span>✕</span> 🇸🇾 <span class="abbr">BJXSY</span></div>
+  </div>
   <h2>Before you enter 💖</h2>
   <p><strong>What is the date I made you mine?</strong></p>
   <input type="text" id="password" placeholder="DD/MM/YY">
