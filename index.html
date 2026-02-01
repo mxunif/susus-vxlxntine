@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Susu ❤️ My Valentine</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    color: white;
+    text-align: center;
+  }
+
+  .container {
+    background: rgba(255,255,255,0.22);
+    backdrop-filter: blur(12px);
+    padding: 35px;
+    border-radius: 22px;
+    max-width: 430px;
+    width: 90%;
+    box-shadow: 0 25px 45px rgba(0,0,0,0.25);
+  }
+
+  h1 { font-size: 2.6rem; }
+  h2 { margin: 15px 0; }
+
+  p {
+    font-size: 1.15rem;
+    line-height: 1.6;
+  }
+
+  .arabic {
+    font-size: 1.3rem;
+    margin: 15px 0;
+  }
+
+  button, input {
+    padding: 14px 30px;
+    border-radius: 30px;
+    border: none;
+    font-size: 1rem;
+    margin-top: 15px;
+  }
+
+  button {
+    background: #ff2f68;
+    color: white;
+    cursor: pointer;
+  }
+
+  #no {
+    background: white;
+    color: #ff2f68;
+    position: absolute;
+  }
+
+  .signature {
+    margin-top: 30px;
+    font-style: italic;
+  }
+
+  .heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 20px;
+    animation: floatUp 6s linear infinite;
+    opacity: 0.7;
+  }
+
+  @keyframes floatUp {
+    to { transform: translateY(-110vh) scale(1.5); }
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+
+  .hidden { display: none; }
+
+  .letter, .laterMessage {
+    background: rgba(255,255,255,0.25);
+    padding: 25px;
+    border-radius: 18px;
+    margin-top: 20px;
+  }
+
+  .countdown {
+    margin-top: 20px;
+    font-size: 1.2rem;
+  }
+</style>
+</head>
+
+<body>
+
+<canvas id="confetti"></canvas>
+
+<audio id="song" loop>
+  <source src="https://files.catbox.moe/7x8f2r.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 🔐 PASSWORD SCREEN -->
+<div class="container" id="lock">
+  <h2>Before you enter 💖</h2>
+  <p><strong>What is the date I made you mine?</strong></p>
+  <input type="text" id="password" placeholder="DD/MM/YY">
+  <br>
+  <button onclick="checkPassword()">Unlock ❤️</button>
+  <p id="error"></p>
+</div>
+
+<!-- 💘 MAIN CONTENT -->
+<div class="container hidden" id="main">
+  <h1>Susu ❤️</h1>
+
+  <p>I made this just for you…</p>
+
+  <p class="arabic">
+    بحبك يا سوسو من كل قلبي، وما في شي بالدنيا بيشبه حبّي إلك
+  </p>
+
+  <p class="arabic">
+    إنتِ روحي، ودنيتي، وكل حياتي ❤️
+  </p>
+
+  <p>
+    I really and truly love you<br>
+    <strong>to the moon and back 🌙✨</strong>
+  </p>
+
+  <div class="countdown" id="countdown"></div>
+
+  <h2>Will you be my Valentine? 💘</h2>
+
+  <button id="yes">Yes 💕</button>
+  <button id="no">No 😢</button>
+
+  <div id="result"></div>
+
+  <div class="letter hidden" id="letter">
+    <p>
+      <strong>My love, ya omri 💖</strong><br><br>
+      you’re the calm in my heart and the smile I look for every day.<br>
+      بحبك قد الدنيا، ووجودك بحياتي نعمة ما بتتعوض،<br>
+      <em>mon cœur</em> you’re my home, my peace, and my forever.<br><br>
+      معك بحس حالي كامل، وهل حب عم يكبر يوم بعد يوم،<br>
+      and I cannot wait until the day you truly belong to me.
+    </p>
+  </div>
+
+  <div class="laterMessage hidden" id="later">
+    💝 I hope you like your gifts 🎁❤️
+  </div>
+
+  <div class="signature">
+    From your love, Mounif ❤️
+  </div>
+</div>
+
+<script>
+  // PASSWORD
+  function checkPassword() {
+    if (document.getElementById("password").value === "25/05/25") {
+      document.getElementById("lock").classList.add("hidden");
+      document.getElementById("main").classList.remove("hidden");
+      initLaterMessage();
+    } else {
+      document.getElementById("error").textContent =
+        "Hmm… only my girl knows that 💕";
+    }
+  }
+
+  // NO BUTTON
+  const noBtn = document.getElementById("no");
+  noBtn.addEventListener("mouseover", () => {
+    noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
+    noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+  });
+
+  // YES BUTTON
+  document.getElementById("yes").addEventListener("click", () => {
+    document.getElementById("result").innerHTML =
+      "<h2>YAY 🥹💖</h2><p>Susu, you just made me the happiest man alive.</p>";
+    document.getElementById("letter").classList.remove("hidden");
+    document.getElementById("song").play();
+    startConfetti();
+  });
+
+  // HEARTS
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = Math.random() * 20 + 15 + "px";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+  }, 400);
+
+  // CONFETTI
+  const canvas = document.getElementById("confetti");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  let confetti = [];
+
+  function startConfetti() {
+    for (let i = 0; i < 250; i++) {
+      confetti.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * 8,
+        color: `hsl(${Math.random()*360},100%,70%)`
+      });
+    }
+    animate();
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    confetti.forEach(c => {
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+      ctx.fillStyle = c.color;
+      ctx.fill();
+      c.y += c.d;
+      if (c.y > canvas.height) c.y = -10;
+    });
+    requestAnimationFrame(animate);
+  }
+
+  // COUNTDOWN
+  const valentines = new Date("February 14, 2026 00:00:00").getTime();
+  setInterval(() => {
+    const now = new Date().getTime();
+    const d = valentines - now;
+    document.getElementById("countdown").innerHTML =
+      `⏳ ${Math.floor(d/86400000)} days ${Math.floor(d/3600000)%24}h ${Math.floor(d/60000)%60}m ${Math.floor(d/1000)%60}s until Valentine’s Day 💘`;
+  }, 1000);
+
+  // LATER MESSAGE (3 days)
+  function initLaterMessage() {
+    const firstVisit = localStorage.getItem("firstVisit") || Date.now();
+    localStorage.setItem("firstVisit", firstVisit);
+    if (Date.now() - firstVisit > 3 * 86400000) {
+      document.getElementById("later").classList.remove("hidden");
+    }
+  }
+</script>
+
+</body>
+</html>
