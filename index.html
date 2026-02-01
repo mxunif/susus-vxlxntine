@@ -8,99 +8,134 @@
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-  /* Page */
-  html, body { height: 100%; }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
 
-  body {
-    margin: 0;
-    font-family: "Montserrat", "Segoe UI", sans-serif;
-    background: linear-gradient(135deg, #ff758c, #ff7eb3);
-    min-height: 100vh;
-    color: white;
-    text-align: center;
-    overflow: auto;
-  }
+body {
+  font-family: "Montserrat", sans-serif;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  color: white;
+  text-align: center;
+  overflow-x: hidden;
+}
 
-  /* Centering wrapper */
-  #page {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-    box-sizing: border-box;
-  }
+#page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
 
-  .container {
-    background: rgba(255,255,255,0.22);
-    backdrop-filter: blur(12px);
-    padding: 40px;
-    border-radius: 22px;
-    /* slightly larger card */
-    width: min(570px, 94%); /* updated width for larger card */
-    box-shadow: 0 30px 60px rgba(0,0,0,0.28);
-    max-height: 90vh;
-    overflow: auto;
-    margin: 0 auto;
+.container {
+  background: rgba(255,255,255,0.22);
+  backdrop-filter: blur(12px);
+  padding: 40px;
+  border-radius: 22px;
+  width: min(600px, 95%);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
 
-    /* entrance animation initial state */
-    transform: translateY(14px) scale(0.995);
-    opacity: 0;
-    transition: transform 520ms cubic-bezier(.22,.9,.35,1), opacity 360ms ease;
-  }
+.container.enter {
+  opacity: 1;
+  transform: translateY(0);
+}
 
-  /* applied when container becomes visible */
-  .container.enter {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
+.hidden {
+  display: none;
+}
 
-  h1 { font-size: 2.6rem; }
-  h2 { margin: 15px 0; }
+h1 {
+  font-size: 2.6rem;
+}
 
-  p { font-size: 1.15rem; line-height: 1.6; }
+.arabic {
+  font-size: 1.3rem;
+  margin: 15px 0;
+}
 
-  .arabic { font-size: 1.3rem; margin: 15px 0; }
+.dedication {
+  font-family: 'Great Vibes', cursive;
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+}
 
-  .dedication {
-    font-family: 'Great Vibes', cursive;
-    font-size: 1.6rem;
-    margin-bottom: 10px;
-    color: #fff;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.28);
-  }
+.flags {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
 
-  .flags { margin-top: 6px; display:flex; gap:8px; align-items:center; justify-content:center; }
-  .flag-img { width: 48px; height: 34px; object-fit:cover; border-radius:6px; box-shadow: 0 2px 6px rgba(0,0,0,0.18); border:1px solid rgba(255,255,255,0.12); }
-  .flags .sep { margin: 0 8px; font-weight:700; }
+.flag-img {
+  width: 50px;
+  height: 35px;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
 
-  button, input { padding: 14px 30px; border-radius: 30px; border: none; font-size: 1rem; margin-top: 15px; }
-  button { background: #ff2f68; color: white; cursor: pointer; }
+button, input {
+  padding: 14px 30px;
+  border-radius: 30px;
+  border: none;
+  font-size: 1rem;
+  margin-top: 15px;
+}
 
-  #no { background: white; color: #ff2f68; position: absolute; }
+button {
+  background: #ff2f68;
+  color: white;
+  cursor: pointer;
+}
 
-  .signature { margin-top: 30px; font-style: italic; }
+#no {
+  background: white;
+  color: #ff2f68;
+  position: absolute;
+}
 
-  .heart { position: fixed; bottom: -20px; font-size: 20px; animation: floatUp 6s linear infinite; opacity: 0.7; pointer-events: none; }
-  @keyframes floatUp { to { transform: translateY(-110vh) scale(1.5); } }
+.signature {
+  margin-top: 30px;
+  font-style: italic;
+}
 
-  canvas { position: fixed; top: 0; left:0; pointer-events:none; z-index:0; }
+.heart {
+  position: fixed;
+  bottom: -20px;
+  font-size: 20px;
+  animation: floatUp 6s linear infinite;
+  opacity: 0.7;
+  pointer-events: none;
+}
 
-  .hidden { display: none; }
+@keyframes floatUp {
+  to { transform: translateY(-120vh) scale(1.5); }
+}
 
-  .letter, .laterMessage { background: rgba(255,255,255,0.25); padding:25px; border-radius:18px; margin-top:20px; color:#fff; }
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
 
-  .countdown { margin-top:20px; font-size:1.2rem; }
+.letter, .laterMessage {
+  background: rgba(255,255,255,0.25);
+  padding: 25px;
+  border-radius: 18px;
+  margin-top: 20px;
+}
 
-  /* ensure the main content appears above the canvas */
-  #main, #lock { position: relative; z-index: 1; }
-
-  /* small responsive tweak */
-  @media (max-width: 420px) {
-    .flag-img { width: 40px; height: 28px; }
-    .dedication { font-size: 1.35rem; }
-    .container { padding: 28px; }
-  }
+.countdown {
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
 </style>
 </head>
 
@@ -108,144 +143,180 @@
 
 <canvas id="confetti"></canvas>
 
-<audio id="song" loop preload="auto" crossorigin="anonymous" controls style="display:block; margin: 10px auto; max-width:90%;">
+<audio id="song" loop preload="auto">
   <source src="https://files.catbox.moe/7x8f2r.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
 </audio>
 
 <div id="page">
 
-  <!-- LOCK -->
-  <div class="container" id="lock">
-    <div>
-      <div class="dedication">To my lover susu from Mounif</div>
-      <div class="flags" aria-hidden="true">
-        <img src="images/benin.png" alt="Benin flag" class="flag-img">
-        <span class="sep">✕</span>
-        <img src="images/syria.png" alt="Syria flag" class="flag-img">
-      </div>
-    </div>
-    <h2>Before you enter 💖</h2>
-    <p><strong>What is the date I made you mine?</strong></p>
-    <input type="text" id="password" placeholder="DD/MM/YY">
-    <br>
-    <button id="unlockBtn">Unlock ❤️</button>
-    <p id="error"></p>
+<!-- LOCK SCREEN -->
+<div class="container enter" id="lock">
+  <div class="dedication">To my lover Susu 💖</div>
+
+  <div class="flags">
+    <img src="benin.jpg" class="flag-img">
+    ✕
+    <img src="syria.jpg" class="flag-img">
   </div>
 
-  <!-- MAIN -->
-  <div class="container hidden" id="main">
-    <h1>Susu ❤️</h1>
+  <h2>Before you enter 💝</h2>
+  <p><strong>What is the date I made you mine?</strong></p>
+  <input type="text" id="password" placeholder="DD/MM/YY">
+  <br>
+  <button onclick="checkPassword()">Unlock ❤️</button>
+  <p id="error"></p>
+</div>
 
-    <p>I made this just for you…</p>
+<!-- MAIN CONTENT -->
+<div class="container hidden" id="main">
+  <h1>Susu ❤️</h1>
 
-    <p class="arabic">بحبك يا سوسو من كل قلبي، وما في شي بالدنيا بيشبه حبّي إلك</p>
-    <p class="arabic">إنتِ روحي، ودنيتي، وكل حياتي ❤️</p>
+  <p>I made this just for you…</p>
 
-    <p>I really and truly love you<br><strong>to the moon and back 🌙✨</strong></p>
+  <p class="arabic">بحبك يا سوسو من كل قلبي، وما في شي بالدنيا بيشبه حبّي إلك</p>
+  <p class="arabic">إنتِ روحي، ودنيتي، وكل حياتي ❤️</p>
 
-    <div class="countdown" id="countdown"></div>
+  <p><strong>I really and truly love you<br>to the moon and back 🌙✨</strong></p>
 
-    <h2>Will you be my Valentine? 💘</h2>
+  <div class="countdown" id="countdown"></div>
 
-    <button id="yes">Yes 💕</button>
-    <button id="no">No 😢</button>
+  <h2>Will you be my Valentine? 💘</h2>
 
-    <div id="result"></div>
+  <button id="yes">Yes 💕</button>
+  <button id="no">No 😢</button>
 
-    <div class="letter hidden" id="letter">
-      <p><strong>My love, ya omri 💖</strong><br><br>
-      you’re the calm in my heart and the smile I look for every day.<br>
-      بحبك قد الدنيا، ووجودك بحياتي نعمة ما بتتعوض،<br>
-      <em>mon cœur</em> you’re my home, my peace, and my forever.<br><br>
-      معك بحس حالي كامل، وهل حب عم يكبر يوم بعد يوم،<br>
-      and I cannot wait until the day you truly belong to me.</p>
-    </div>
+  <div id="result"></div>
 
-    <div class="laterMessage hidden" id="later">💝 I hope you like your gifts 🎁❤️</div>
-
-    <div class="signature">From your love, Mounif ❤️</div>
+  <div class="letter hidden" id="letter">
+    <p><strong>My love, ya omri 💖</strong><br><br>
+    you’re the calm in my heart and the smile I look for every day.<br>
+    بحبك قد الدنيا، ووجودك بحياتي نعمة ما بتتعوض،<br>
+    <em>mon cœur</em> you’re my home, my peace, and my forever.<br><br>
+    معك بحس حالي كامل، وهل حب عم يكبر يوم بعد يوم،<br>
+    and I cannot wait until the day you truly belong to me.</p>
   </div>
+
+  <div class="laterMessage hidden" id="later">
+    💝 I hope you like your gifts 🎁❤️
+  </div>
+
+  <div class="signature">From your love, Mounif ❤️</div>
+</div>
 
 </div>
 
 <script>
-// apply entrance animation on load
-window.addEventListener('DOMContentLoaded', () => {
-  const lock = document.getElementById('lock');
-  // small delay so transition runs after paint
-  requestAnimationFrame(() => setTimeout(() => lock.classList.add('enter'), 60));
+const song = document.getElementById("song");
 
-  // wire unlock button
-  document.getElementById('unlockBtn').addEventListener('click', checkPassword);
-});
-
+// PASSWORD
 function checkPassword() {
-  const pwdEl = document.getElementById('password');
-  const lock = document.getElementById('lock');
-  const main = document.getElementById('main');
-  const error = document.getElementById('error');
+  if (document.getElementById("password").value === "25/05/25") {
+    document.getElementById("lock").classList.add("hidden");
+    const main = document.getElementById("main");
+    main.classList.remove("hidden");
+    setTimeout(() => main.classList.add("enter"), 50);
 
-  if (pwdEl.value === '25/05/25') {
-    // hide lock with animation, then show main
-    lock.classList.remove('enter');
-    lock.classList.add('hidden');
-    main.classList.remove('hidden');
-    // trigger entrance animation for main
-    requestAnimationFrame(() => setTimeout(() => main.classList.add('enter'), 30));
+    try {
+      song.volume = 0.6;
+      song.play();
+    } catch {}
+
     initLaterMessage();
   } else {
-    error.textContent = "Hmm… only my girl knows that 💕";
+    document.getElementById("error").innerText = "Only my girl knows that 💕";
   }
 }
 
-// NO BUTTON behavior
-const noBtn = document.getElementById('no');
-if (noBtn) {
-  noBtn.addEventListener('mouseover', () => {
-    const btnW = noBtn.offsetWidth || 100;
-    const btnH = noBtn.offsetHeight || 40;
-    noBtn.style.left = Math.random() * (window.innerWidth - btnW) + "px";
-    noBtn.style.top = Math.random() * (window.innerHeight - btnH) + "px";
-  });
-}
+// NO BUTTON ESCAPE
+const noBtn = document.getElementById("no");
+noBtn.addEventListener("mouseover", () => {
+  noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
+  noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+});
 
-// YES BUTTON + audio play
-const song = document.getElementById('song');
-const yesBtn = document.getElementById('yes');
-if (yesBtn) yesBtn.addEventListener('click', async () => {
-  document.getElementById('result').innerHTML = "<h2>YAY 🥹💖</h2><p>Susu, you just made me the happiest man alive.</p>";
-  document.getElementById('letter').classList.remove('hidden');
+// YES BUTTON
+document.getElementById("yes").addEventListener("click", async () => {
+  document.getElementById("result").innerHTML =
+    "<h2>YAY 🥹💖</h2><p>You just made me the happiest man alive.</p>";
+  document.getElementById("letter").classList.remove("hidden");
   startConfetti();
-  try { await song.play(); } catch (err) { console.warn('Audio play prevented', err); const hint = document.createElement('p'); hint.textContent = "Tap the audio play button above if the song didn't start ⏯️"; document.getElementById('result').appendChild(hint); }
+  try {
+    song.volume = 0.85;
+    await song.play();
+  } catch {}
 });
 
 // HEARTS
 setInterval(() => {
-  const heart = document.createElement('div');
-  heart.className = 'heart';
-  heart.innerHTML = '❤️';
-  heart.style.left = Math.random() * 100 + 'vw';
-  heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerText = "❤️";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = Math.random() * 20 + 15 + "px";
   document.body.appendChild(heart);
   setTimeout(() => heart.remove(), 6000);
 }, 400);
 
 // CONFETTI
-const canvas = document.getElementById('confetti');
-const ctx = canvas.getContext('2d');
-function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-resizeCanvas(); window.addEventListener('resize', resizeCanvas);
-let confetti = []; let animating = false;
-function startConfetti(){ if(animating) return; animating = true; confetti = []; for(let i=0;i<250;i++){ confetti.push({ x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*6+4, d:Math.random()*8+2, color:`hsl(${Math.random()*360},100%,70%)` }); } animate(); }
-function animate(){ ctx.clearRect(0,0,canvas.width,canvas.height); confetti.forEach(c=>{ ctx.beginPath(); ctx.arc(c.x,c.y,c.r,0,Math.PI*2); ctx.fillStyle = c.color; ctx.fill(); c.y += c.d; if(c.y>canvas.height) c.y = -10; }); requestAnimationFrame(animate); }
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+let confetti = [];
+function startConfetti() {
+  confetti = [];
+  for (let i = 0; i < 250; i++) {
+    confetti.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 6 + 4,
+      d: Math.random() * 8 + 2,
+      c: `hsl(${Math.random() * 360},100%,70%)`
+    });
+  }
+  animate();
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  confetti.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.c;
+    ctx.fill();
+    p.y += p.d;
+    if (p.y > canvas.height) p.y = -10;
+  });
+  requestAnimationFrame(animate);
+}
 
 // COUNTDOWN
-const valentines = new Date('February 14, 2026 00:00:00').getTime();
-setInterval(()=>{ const now = new Date().getTime(); const d = valentines - now; const days = Math.max(0, Math.floor(d/86400000)); const hours = Math.floor(d/3600000)%24; const minutes = Math.floor(d/60000)%60; const seconds = Math.floor(d/1000)%60; const el = document.getElementById('countdown'); if(el) el.innerHTML = `⏳ ${days} days ${hours}h ${minutes}m ${seconds}s until Valentine’s Day 💘`; }, 1000);
+const valentines = new Date("February 14, 2026 00:00:00").getTime();
+setInterval(() => {
+  const now = Date.now();
+  const diff = valentines - now;
+  const d = Math.max(0, Math.floor(diff / 86400000));
+  const h = Math.floor(diff / 3600000) % 24;
+  const m = Math.floor(diff / 60000) % 60;
+  const s = Math.floor(diff / 1000) % 60;
+  document.getElementById("countdown").innerText =
+    `⏳ ${d} days ${h}h ${m}m ${s}s until Valentine’s Day 💘`;
+}, 1000);
 
 // LATER MESSAGE
-function initLaterMessage(){ const firstVisitRaw = localStorage.getItem('firstVisit'); if(!firstVisitRaw){ localStorage.setItem('firstVisit', Date.now().toString()); return; } const firstVisit = parseInt(firstVisitRaw,10); if(!isNaN(firstVisit) && (Date.now()-firstVisit > 3*86400000)){ document.getElementById('later').classList.remove('hidden'); } }
+function initLaterMessage() {
+  const first = localStorage.getItem("firstVisit");
+  if (!first) {
+    localStorage.setItem("firstVisit", Date.now());
+  } else if (Date.now() - first > 3 * 86400000) {
+    document.getElementById("later").classList.remove("hidden");
+  }
+}
 </script>
 
 </body>
