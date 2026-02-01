@@ -10,13 +10,16 @@
     margin: 0;
     font-family: "Segoe UI", sans-serif;
     background: linear-gradient(135deg, #ff758c, #ff7eb3);
-    height: 100vh;
+    /* use min-height so mobile browser UI doesn't cut layout, allow scrolling */
+    min-height: 100dvh;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
     color: white;
     text-align: center;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    /* allow scrolling if content is taller than viewport */
+    overflow: auto;
   }
 
   .container {
@@ -27,6 +30,9 @@
     max-width: 430px;
     width: 90%;
     box-shadow: 0 25px 45px rgba(0,0,0,0.25);
+    /* ensure content doesn't overflow viewport on small screens */
+    max-height: 90vh;
+    overflow: auto;
   }
 
   h1 { font-size: 2.6rem; }
@@ -73,6 +79,7 @@
     font-size: 20px;
     animation: floatUp 6s linear infinite;
     opacity: 0.7;
+    pointer-events: none;
   }
 
   @keyframes floatUp {
@@ -84,6 +91,7 @@
     top: 0;
     left: 0;
     pointer-events: none;
+    z-index: 0;
   }
 
   .hidden { display: none; }
@@ -93,12 +101,16 @@
     padding: 25px;
     border-radius: 18px;
     margin-top: 20px;
+    color: #fff;
   }
 
   .countdown {
     margin-top: 20px;
     font-size: 1.2rem;
   }
+
+  /* ensure the main content appears above the canvas */
+  #main, #lock { position: relative; z-index: 1; }
 </style>
 </head>
 
@@ -106,8 +118,10 @@
 
 <canvas id="confetti"></canvas>
 
-<audio id="song" loop>
+<!-- added preload + crossorigin and controls as a fallback for manual play -->
+<audio id="song" loop preload="auto" crossorigin="anonymous" controls style="display:block; margin: 10px auto; max-width:90%;">
   <source src="https://files.catbox.moe/7x8f2r.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
 </audio>
 
 <!-- 🔐 PASSWORD SCREEN -->
@@ -184,17 +198,37 @@
   // NO BUTTON
   const noBtn = document.getElementById("no");
   noBtn.addEventListener("mouseover", () => {
-    noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
-    noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+    // keep button inside viewport
+    const btnW = noBtn.offsetWidth || 100;
+    const btnH = noBtn.offsetHeight || 40;
+    noBtn.style.left = Math.random() * (window.innerWidth - btnW) + "px";
+    noBtn.style.top = Math.random() * (window.innerHeight - btnH) + "px";
   });
 
-  // YES BUTTON
-  document.getElementById("yes").addEventListener("click", () => {
+  // YES BUTTON + robust audio play
+  const song = document.getElementById("song");
+  const yesBtn = document.getElementById("yes");
+  yesBtn.addEventListener("click", async () => {
     document.getElementById("result").innerHTML =
       "<h2>YAY 🥹💖</h2><p>Susu, you just made me the happiest man alive.</p>";
     document.getElementById("letter").classList.remove("hidden");
-    document.getElementById("song").play();
+
+    // Start confetti immediately
     startConfetti();
+
+    // Try to play the song (user gesture from clicking "Yes")
+    try {
+      // modern browsers return a promise from play()
+      await song.play();
+      // optionally hide controls after play started (comment out if you want controls visible)
+      // song.controls = false;
+    } catch (err) {
+      console.warn("Audio play was prevented:", err);
+      // show a hint so the user can manually tap the visible audio control
+      const hint = document.createElement("p");
+      hint.textContent = "Tap the audio play button above if the song didn't start ⏯️";
+      document.getElementById("result").appendChild(hint);
+    }
   });
 
   // HEARTS
@@ -211,17 +245,26 @@
   // CONFETTI
   const canvas = document.getElementById("confetti");
   const ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
   let confetti = [];
+  let animating = false;
 
   function startConfetti() {
+    if (animating) return;
+    animating = true;
+    confetti = [];
     for (let i = 0; i < 250; i++) {
       confetti.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         r: Math.random() * 6 + 4,
-        d: Math.random() * 8,
+        d: Math.random() * 8 + 2,
         color: `hsl(${Math.random()*360},100%,70%)`
       });
     }
@@ -246,15 +289,23 @@
   setInterval(() => {
     const now = new Date().getTime();
     const d = valentines - now;
+    const days = Math.max(0, Math.floor(d/86400000));
+    const hours = Math.floor(d/3600000)%24;
+    const minutes = Math.floor(d/60000)%60;
+    const seconds = Math.floor(d/1000)%60;
     document.getElementById("countdown").innerHTML =
-      `⏳ ${Math.floor(d/86400000)} days ${Math.floor(d/3600000)%24}h ${Math.floor(d/60000)%60}m ${Math.floor(d/1000)%60}s until Valentine’s Day 💘`;
+      `⏳ ${days} days ${hours}h ${minutes}m ${seconds}s until Valentine’s Day 💘`;
   }, 1000);
 
-  // LATER MESSAGE (3 days)
+  // LATER MESSAGE (3 days) - fixed localStorage timestamp handling
   function initLaterMessage() {
-    const firstVisit = localStorage.getItem("firstVisit") || Date.now();
-    localStorage.setItem("firstVisit", firstVisit);
-    if (Date.now() - firstVisit > 3 * 86400000) {
+    const firstVisitRaw = localStorage.getItem("firstVisit");
+    if (!firstVisitRaw) {
+      localStorage.setItem("firstVisit", Date.now().toString());
+      return;
+    }
+    const firstVisit = parseInt(firstVisitRaw, 10);
+    if (!isNaN(firstVisit) && (Date.now() - firstVisit > 3 * 86400000)) {
       document.getElementById("later").classList.remove("hidden");
     }
   }
