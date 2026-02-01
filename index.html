@@ -67,12 +67,18 @@
     justify-content: center;
   }
 
-  .flags .abbr {
-    font-size: 0.85rem;
+  .flag-img {
+    width: 44px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .flags .sep {
+    margin: 0 8px;
     font-weight: 700;
-    letter-spacing: 2px;
-    margin-left: 6px;
-    opacity: 0.95;
   }
 
   button, input {
@@ -155,7 +161,11 @@
 <div class="container" id="lock">
   <div>
     <div class="dedication">To my lover susu from Mounif</div>
-    <div class="flags" aria-hidden="true">&#x1F1EF;&#x1F1F2; <span>✕</span> &#x1F1F8;&#x1F1EE; <span class="abbr">BJXSY</span></div>
+    <div class="flags" aria-hidden="true">
+      <img src="https://th.bing.com/th/id/R.4edd523c05e536231315d5ee97964480?rik=cf0ve48xxjWHOg&pid=ImgRaw&r=0" alt="Benin flag" class="flag-img">
+      <span class="sep">✕</span>
+      <img src="https://flagpedia.net/data/flags/w1600/sy.png" alt="Syria flag" class="flag-img">
+    </div>
   </div>
   <h2>Before you enter 💖</h2>
   <p><strong>What is the date I made you mine?</strong></p>
