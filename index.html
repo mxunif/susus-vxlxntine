@@ -46,13 +46,9 @@ body {
   transform: translateY(0);
 }
 
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 
-h1 {
-  font-size: 2.6rem;
-}
+h1 { font-size: 2.6rem; }
 
 .arabic {
   font-size: 1.3rem;
@@ -63,21 +59,6 @@ h1 {
   font-family: 'Great Vibes', cursive;
   font-size: 1.6rem;
   margin-bottom: 10px;
-}
-
-.flags {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.flag-img {
-  width: 50px;
-  height: 35px;
-  border-radius: 6px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 button, input {
@@ -105,6 +86,18 @@ button {
   font-style: italic;
 }
 
+.countdown {
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+.letter, .laterMessage {
+  background: rgba(255,255,255,0.25);
+  padding: 25px;
+  border-radius: 18px;
+  margin-top: 20px;
+}
+
 .heart {
   position: fixed;
   bottom: -20px;
@@ -125,17 +118,55 @@ canvas {
   pointer-events: none;
 }
 
-.letter, .laterMessage {
-  background: rgba(255,255,255,0.25);
-  padding: 25px;
-  border-radius: 18px;
-  margin-top: 20px;
+/* FLAGS */
+.flags {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 15px;
 }
 
-.countdown {
-  margin-top: 20px;
-  font-size: 1.2rem;
+.flag {
+  width: 50px;
+  height: 34px;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
+
+/* BENIN */
+.benin {
+  display: grid;
+  grid-template-columns: 40% 60%;
+}
+.benin .green { background: #2fa04f; }
+.benin .right {
+  display: grid;
+  grid-template-rows: 50% 50%;
+}
+.benin .yellow { background: #fcd116; }
+.benin .red { background: #e8112d; }
+
+/* SYRIA */
+.syria {
+  display: grid;
+  grid-template-rows: 33.33% 33.33% 33.33%;
+}
+.syria .green { background: #007a3d; }
+.syria .white { background: #fff; position: relative; }
+.syria .black { background: #000; }
+
+.star {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ce1126;
+  font-size: 12px;
+}
+.star.one { left: 30%; }
+.star.two { left: 50%; }
+.star.three { left: 70%; }
 </style>
 </head>
 
@@ -149,14 +180,29 @@ canvas {
 
 <div id="page">
 
-<!-- LOCK SCREEN -->
+<!-- LOCK -->
 <div class="container enter" id="lock">
-  <div class="dedication">To my lover, Susu. From her lover Mounif 💖</div>
+  <div class="dedication">To my lover Susu 💖</div>
 
   <div class="flags">
-    <img src="benin.jpg" class="flag-img">
+    <div class="flag benin">
+      <div class="green"></div>
+      <div class="right">
+        <div class="yellow"></div>
+        <div class="red"></div>
+      </div>
+    </div>
+
     ✕
-    <img src="syria.jpg" class="flag-img">
+    <div class="flag syria">
+      <div class="green"></div>
+      <div class="white">
+        <span class="star one">★</span>
+        <span class="star two">★</span>
+        <span class="star three">★</span>
+      </div>
+      <div class="black"></div>
+    </div>
   </div>
 
   <h2>Before you enter 💝</h2>
@@ -167,7 +213,7 @@ canvas {
   <p id="error"></p>
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- MAIN -->
 <div class="container hidden" id="main">
   <h1>Susu ❤️</h1>
 
@@ -181,7 +227,6 @@ canvas {
   <div class="countdown" id="countdown"></div>
 
   <h2>Will you be my Valentine? 💘</h2>
-
   <button id="yes">Yes 💕</button>
   <button id="no">No 😢</button>
 
@@ -208,68 +253,49 @@ canvas {
 <script>
 const song = document.getElementById("song");
 
-// PASSWORD
 function checkPassword() {
-  if (document.getElementById("password").value === "25/05/25") {
-    document.getElementById("lock").classList.add("hidden");
-    const main = document.getElementById("main");
+  if (password.value === "25/05/25") {
+    lock.classList.add("hidden");
     main.classList.remove("hidden");
     setTimeout(() => main.classList.add("enter"), 50);
-
-    try {
-      song.volume = 0.6;
-      song.play();
-    } catch {}
-
+    song.volume = 0.6;
+    song.play().catch(()=>{});
     initLaterMessage();
   } else {
-    document.getElementById("error").innerText = "Only my girl knows that 💕";
+    error.innerText = "Only my girl knows that 💕";
   }
 }
 
-// NO BUTTON ESCAPE
-const noBtn = document.getElementById("no");
-noBtn.addEventListener("mouseover", () => {
-  noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
-  noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+no.addEventListener("mouseover", () => {
+  no.style.left = Math.random() * (window.innerWidth - 100) + "px";
+  no.style.top = Math.random() * (window.innerHeight - 50) + "px";
 });
 
-// YES BUTTON
-document.getElementById("yes").addEventListener("click", async () => {
-  document.getElementById("result").innerHTML =
-    "<h2>YAY 🥹💖</h2><p>You just made me the happiest man alive.</p>";
-  document.getElementById("letter").classList.remove("hidden");
+yes.addEventListener("click", async () => {
+  result.innerHTML = "<h2>YAY 🥹💖</h2><p>You just made me the happiest man alive.</p>";
+  letter.classList.remove("hidden");
   startConfetti();
-  try {
-    song.volume = 0.85;
-    await song.play();
-  } catch {}
+  song.volume = 0.85;
+  song.play().catch(()=>{});
 });
 
-// HEARTS
 setInterval(() => {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerText = "❤️";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = Math.random() * 20 + 15 + "px";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 6000);
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.innerText = "❤️";
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.fontSize = Math.random() * 20 + 15 + "px";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 6000);
 }, 400);
 
-// CONFETTI
 const canvas = document.getElementById("confetti");
 const ctx = canvas.getContext("2d");
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener("resize", resize);
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 let confetti = [];
 function startConfetti() {
-  confetti = [];
   for (let i = 0; i < 250; i++) {
     confetti.push({
       x: Math.random() * canvas.width,
@@ -283,10 +309,10 @@ function startConfetti() {
 }
 
 function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
   confetti.forEach(p => {
     ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
     ctx.fillStyle = p.c;
     ctx.fill();
     p.y += p.d;
@@ -295,27 +321,17 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
-// COUNTDOWN
-const valentines = new Date("February 14, 2026 00:00:00").getTime();
+const valentines = new Date("February 14, 2026").getTime();
 setInterval(() => {
-  const now = Date.now();
-  const diff = valentines - now;
-  const d = Math.max(0, Math.floor(diff / 86400000));
-  const h = Math.floor(diff / 3600000) % 24;
-  const m = Math.floor(diff / 60000) % 60;
-  const s = Math.floor(diff / 1000) % 60;
-  document.getElementById("countdown").innerText =
-    `⏳ ${d} days ${h}h ${m}m ${s}s until Valentine’s Day 💘`;
+  const diff = valentines - Date.now();
+  countdown.innerText =
+    `⏳ ${Math.max(0, Math.floor(diff/86400000))} days until Valentine’s Day 💘`;
 }, 1000);
 
-// LATER MESSAGE
 function initLaterMessage() {
   const first = localStorage.getItem("firstVisit");
-  if (!first) {
-    localStorage.setItem("firstVisit", Date.now());
-  } else if (Date.now() - first > 3 * 86400000) {
-    document.getElementById("later").classList.remove("hidden");
-  }
+  if (!first) localStorage.setItem("firstVisit", Date.now());
+  else if (Date.now() - first > 3*86400000) later.classList.remove("hidden");
 }
 </script>
 
