@@ -27,7 +27,6 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  position: relative;
 }
 
 .container {
@@ -93,7 +92,7 @@ button:hover {
   font-style: italic;
 }
 
-/* LUXURY FLIP CLOCK */
+/* WHITE LUXURY FLIP TIMER */
 
 .flip-container {
   display: flex;
@@ -104,12 +103,12 @@ button:hover {
 }
 
 .flip-box {
-  background: linear-gradient(145deg, #111, #222);
+  background: white;
   padding: 15px 18px;
   border-radius: 12px;
-  min-width: 75px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-  color: #00ffcc;
+  min-width: 80px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  color: #ff2f68;
   font-weight: bold;
   perspective: 1000px;
 }
@@ -125,8 +124,8 @@ button:hover {
 }
 
 .flip-box small {
-  font-size: 0.6rem;
-  color: #aaa;
+  font-size: 0.65rem;
+  color: #888;
 }
 
 /* LETTER + LATER MESSAGE */
@@ -223,6 +222,7 @@ canvas {
 
 <div id="page">
 
+<!-- LOCK SCREEN -->
 <div class="container enter" id="lock">
   <div class="dedication">To my lover Susu 💖</div>
 
@@ -254,6 +254,7 @@ canvas {
   <p id="error"></p>
 </div>
 
+<!-- MAIN PAGE -->
 <div class="container hidden" id="main">
   <h1>Susu ❤️</h1>
 
@@ -267,16 +268,27 @@ canvas {
     </div>
   </div>
 
+  <p class="arabic">بحبك يا سوسو من كل قلبي ❤️</p>
+
   <h2>Will you be my Valentine? 💘</h2>
   <button id="yes">Yes 💕</button>
   <button id="no">No 😢</button>
 
-  <br><br>
-  <button id="burkin" style="font-size:0.7rem; padding:8px 16px;">
-    click here and you get your BURKIN!!!
-  </button>
-
   <div id="result"></div>
+
+  <div class="letter hidden" id="letter">
+    <p><strong>My love, ya omri 💖</strong><br><br>
+    you’re the calm in my heart and the smile I look for every day.<br>
+    بحبك قد الدنيا، ووجودك بحياتي نعمة ما بتتعوض،<br>
+    <em>mon cœur</em> you’re my home, my peace, and my forever.<br><br>
+    معك بحس حالي كامل، وهل حب عم يكبر يوم بعد يوم،<br>
+    and I cannot wait until the day you truly belong to me.</p>
+  </div>
+
+  <div class="laterMessage hidden" id="later">
+    💝 I hope you like your gifts 🎁❤️
+  </div>
+
   <div class="signature">From your love, Mounif ❤️</div>
 </div>
 
@@ -284,7 +296,7 @@ canvas {
 
 <script>
 
-/* PASSWORD + AUDIO */
+/* AUDIO + PASSWORD */
 
 const song = document.getElementById("song");
 
@@ -297,12 +309,14 @@ function checkPassword() {
     song.volume = 0.6;
     song.currentTime = 0;
     song.play();
+
+    initLaterMessage();
   } else {
     error.innerText = "Only my girl knows that 💕";
   }
 }
 
-/* FLIP CLOCK */
+/* FLIP TIMER */
 
 const loveStartDate = new Date("May 25, 2025 00:00:00").getTime();
 
@@ -333,20 +347,69 @@ setInterval(() => {
   updateFlip("seconds", seconds);
 }, 1000);
 
-/* ESCAPE BUTTONS */
+/* YES BUTTON */
+
+yes.addEventListener("click", () => {
+  result.innerHTML = "<h2>YAY 🥹💖</h2><p>You just made me the happiest man alive.</p>";
+  letter.classList.remove("hidden");
+  startConfetti();
+  song.volume = 0.85;
+});
+
+/* NO BUTTON ESCAPE */
 
 no.addEventListener("mouseover", () => {
   no.style.left = Math.random() * (window.innerWidth - 120) + "px";
   no.style.top = Math.random() * (window.innerHeight - 60) + "px";
 });
 
-burkin.addEventListener("mouseover", () => {
-  burkin.style.position = "absolute";
-  burkin.style.left = Math.random() * (window.innerWidth - 150) + "px";
-  burkin.style.top = Math.random() * (window.innerHeight - 60) + "px";
-});
+/* CONFETTI */
 
-burkin.addEventListener("click", e => e.preventDefault());
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let confetti = [];
+let confettiRunning = false;
+
+function startConfetti() {
+  if (confettiRunning) return;
+  confettiRunning = true;
+
+  for (let i = 0; i < 200; i++) {
+    confetti.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 6 + 4,
+      d: Math.random() * 6 + 2,
+      c: `hsl(${Math.random() * 360},100%,70%)`
+    });
+  }
+  animate();
+}
+
+function animate() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  confetti.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle = p.c;
+    ctx.fill();
+    p.y += p.d;
+    if (p.y > canvas.height) p.y = -10;
+  });
+  requestAnimationFrame(animate);
+}
+
+/* LATER MESSAGE */
+
+function initLaterMessage() {
+  const first = localStorage.getItem("firstVisit");
+  if (!first) localStorage.setItem("firstVisit", Date.now());
+  else if (Date.now() - first > 3*86400000)
+    document.getElementById("later").classList.remove("hidden");
+}
 
 </script>
 
