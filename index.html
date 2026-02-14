@@ -27,6 +27,7 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  position: relative;
 }
 
 .container {
@@ -83,6 +84,15 @@ button:hover {
 
 #no {
   background: white;
+  color: #ff2f68;
+  position: absolute;
+}
+
+#burkin {
+  font-size: 0.7rem;
+  padding: 8px 16px;
+  margin-top: 20px;
+  background: #ffffff;
   color: #ff2f68;
   position: absolute;
 }
@@ -222,30 +232,8 @@ canvas {
 
 <div id="page">
 
-<!-- LOCK SCREEN -->
 <div class="container enter" id="lock">
   <div class="dedication">To my lover Susu 💖</div>
-
-  <div class="flags">
-    <div class="flag benin">
-      <div class="green"></div>
-      <div class="right">
-        <div class="yellow"></div>
-        <div class="red"></div>
-      </div>
-    </div>
-    ✕
-    <div class="flag syria">
-      <div class="green"></div>
-      <div class="white">
-        <span class="star one">★</span>
-        <span class="star two">★</span>
-        <span class="star three">★</span>
-      </div>
-      <div class="black"></div>
-    </div>
-  </div>
-
   <h2>Before you enter 💝</h2>
   <p><strong>What is the date I made you mine?</strong></p>
   <input type="text" id="password" placeholder="DD/MM/YY">
@@ -254,35 +242,29 @@ canvas {
   <p id="error"></p>
 </div>
 
-<!-- MAIN PAGE -->
 <div class="container hidden" id="main">
   <h1>Susu ❤️</h1>
 
-  <div>
-    <h3>❤️ Since the day I made you mine ❤️</h3>
-    <div class="flip-container">
-      <div class="flip-box"><span id="days">0</span><small>DAYS</small></div>
-      <div class="flip-box"><span id="hours">0</span><small>HOURS</small></div>
-      <div class="flip-box"><span id="minutes">0</span><small>MINUTES</small></div>
-      <div class="flip-box"><span id="seconds">0</span><small>SECONDS</small></div>
-    </div>
+  <h3>❤️ Since the day I made you mine ❤️</h3>
+  <div class="flip-container">
+    <div class="flip-box"><span id="days">0</span><small>DAYS</small></div>
+    <div class="flip-box"><span id="hours">0</span><small>HOURS</small></div>
+    <div class="flip-box"><span id="minutes">0</span><small>MINUTES</small></div>
+    <div class="flip-box"><span id="seconds">0</span><small>SECONDS</small></div>
   </div>
-
-  <p class="arabic">بحبك يا سوسو من كل قلبي ❤️</p>
 
   <h2>Will you be my Valentine? 💘</h2>
   <button id="yes">Yes 💕</button>
   <button id="no">No 😢</button>
 
+  <button id="burkin">click here and you get your BURKIN!!!</button>
+
   <div id="result"></div>
 
   <div class="letter hidden" id="letter">
     <p><strong>My love, ya omri 💖</strong><br><br>
-    you’re the calm in my heart and the smile I look for every day.<br>
-    بحبك قد الدنيا، ووجودك بحياتي نعمة ما بتتعوض،<br>
-    <em>mon cœur</em> you’re my home, my peace, and my forever.<br><br>
-    معك بحس حالي كامل، وهل حب عم يكبر يوم بعد يوم،<br>
-    and I cannot wait until the day you truly belong to me.</p>
+    you’re my calm, my peace, my everything.
+    I cannot wait until the day you truly belong to me.</p>
   </div>
 
   <div class="laterMessage hidden" id="later">
@@ -296,7 +278,7 @@ canvas {
 
 <script>
 
-/* AUDIO + PASSWORD */
+/* PASSWORD + AUDIO */
 
 const song = document.getElementById("song");
 
@@ -305,29 +287,26 @@ function checkPassword() {
     lock.classList.add("hidden");
     main.classList.remove("hidden");
     setTimeout(() => main.classList.add("enter"), 50);
-
     song.volume = 0.6;
-    song.currentTime = 0;
     song.play();
-
     initLaterMessage();
   } else {
     error.innerText = "Only my girl knows that 💕";
   }
 }
 
-/* FLIP TIMER */
+/* TIMER */
 
 const loveStartDate = new Date("May 25, 2025 00:00:00").getTime();
 
 function updateFlip(id, value) {
-  const element = document.getElementById(id);
-  const box = element.parentElement;
+  const el = document.getElementById(id);
+  const box = el.parentElement;
 
-  if (element.innerText != value) {
+  if (el.innerText != value) {
     box.classList.add("flip");
     setTimeout(() => {
-      element.innerText = value;
+      el.innerText = value;
       box.classList.remove("flip");
     }, 200);
   }
@@ -335,22 +314,16 @@ function updateFlip(id, value) {
 
 setInterval(() => {
   const diff = Date.now() - loveStartDate;
-
-  const days = Math.floor(diff / (1000*60*60*24));
-  const hours = Math.floor((diff / (1000*60*60)) % 24);
-  const minutes = Math.floor((diff / (1000*60)) % 60);
-  const seconds = Math.floor((diff / 1000) % 60);
-
-  updateFlip("days", days);
-  updateFlip("hours", hours);
-  updateFlip("minutes", minutes);
-  updateFlip("seconds", seconds);
+  updateFlip("days", Math.floor(diff / (1000*60*60*24)));
+  updateFlip("hours", Math.floor((diff / (1000*60*60)) % 24));
+  updateFlip("minutes", Math.floor((diff / (1000*60)) % 60));
+  updateFlip("seconds", Math.floor((diff / 1000) % 60));
 }, 1000);
 
 /* YES BUTTON */
 
 yes.addEventListener("click", () => {
-  result.innerHTML = "<h2>YAY 🥹💖</h2><p>You just made me the happiest man alive.</p>";
+  result.innerHTML = "<h2>YAY 🥹💖</h2>";
   letter.classList.remove("hidden");
   startConfetti();
   song.volume = 0.85;
@@ -363,6 +336,15 @@ no.addEventListener("mouseover", () => {
   no.style.top = Math.random() * (window.innerHeight - 60) + "px";
 });
 
+/* BURKIN ESCAPE */
+
+burkin.addEventListener("mouseover", () => {
+  burkin.style.left = Math.random() * (window.innerWidth - 160) + "px";
+  burkin.style.top = Math.random() * (window.innerHeight - 60) + "px";
+});
+
+burkin.addEventListener("click", e => e.preventDefault());
+
 /* CONFETTI */
 
 const canvas = document.getElementById("confetti");
@@ -371,11 +353,11 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let confetti = [];
-let confettiRunning = false;
+let running = false;
 
 function startConfetti() {
-  if (confettiRunning) return;
-  confettiRunning = true;
+  if (running) return;
+  running = true;
 
   for (let i = 0; i < 200; i++) {
     confetti.push({
@@ -401,8 +383,6 @@ function animate() {
   });
   requestAnimationFrame(animate);
 }
-
-/* LATER MESSAGE */
 
 function initLaterMessage() {
   const first = localStorage.getItem("firstVisit");
